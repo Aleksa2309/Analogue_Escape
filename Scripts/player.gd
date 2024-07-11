@@ -10,6 +10,8 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var prevVelocity: Vector2 = Vector2.ZERO
 
 @onready var animated_sprite_2d = $AnimatedSprite2D
+@onready var idle_timer = $idle_timer
+
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -36,10 +38,13 @@ func _physics_process(delta):
 	#Play animation
 	if is_on_floor():
 		if direction == 0:
-			animated_sprite_2d.play("idle")
+			if idle_timer.time_left == 0:
+				idle_timer.start()
 		else:
 			animated_sprite_2d.play("run")
-	#else:
+			idle_timer.stop()
+	else:
+		idle_timer.stop()
 	#	animated_sprite_2d.play("jump")
 	
 	
@@ -52,3 +57,8 @@ func _physics_process(delta):
 	move_and_slide()
 	
 	prevVelocity = velocity
+
+
+func _on_idle_timer_timeout():
+	animated_sprite_2d.play("idle")
+	

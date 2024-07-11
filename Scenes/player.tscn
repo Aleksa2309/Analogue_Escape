@@ -345,3 +345,8 @@ animation = &"idle"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-2.98023e-08, 0.5)
 shape = SubResource("RectangleShape2D_hp1wf")
+
+[node name="idle_timer" type="Timer" parent="."]
+wait_time = 1.5
+
+[connection signal="timeout" from="idle_timer" to="." method="_on_idle_timer_timeout"]
