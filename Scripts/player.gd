@@ -9,8 +9,10 @@ const JUMP_ACCELARATION = -50
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var prevVelocity: Vector2 = Vector2.ZERO
 
-@onready var animated_sprite_2d = $AnimatedSprite2D
+@onready var animation_player = $AnimationPlayer
 @onready var idle_timer = $idle_timer
+@onready var sprite_2d = $Sprite2D
+@onready var animation_tree = $AnimationTree
 
 
 func _physics_process(delta):
@@ -31,9 +33,9 @@ func _physics_process(delta):
 	
 	#Flip the sprite
 	if direction > 0:
-		animated_sprite_2d.flip_h = false
+		sprite_2d.flip_h = false
 	elif direction < 0:
-		animated_sprite_2d.flip_h = true
+		sprite_2d.flip_h = true
 	
 	#Play animation
 	if is_on_floor():
@@ -41,7 +43,7 @@ func _physics_process(delta):
 			if idle_timer.time_left == 0:
 				idle_timer.start()
 		else:
-			animated_sprite_2d.play("run")
+			animation_player.play("run")
 			idle_timer.stop()
 	else:
 		idle_timer.stop()
@@ -60,5 +62,9 @@ func _physics_process(delta):
 
 
 func _on_idle_timer_timeout():
-	animated_sprite_2d.play("idle")
-	
+	animation_player.play("idle")
+
+func update_animation_parameters():
+	if velocity == Vector2.ZERO:
+		
+		animation_tree["parameters/conditions/idle"] = true
