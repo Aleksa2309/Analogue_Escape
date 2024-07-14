@@ -415,10 +415,10 @@ position = Vector2(233, -51)
 
 [node name="coin_score" type="Label" parent="Text"]
 unique_name_in_owner = true
-offset_left = 300.0
-offset_top = -113.0
-offset_right = 336.0
-offset_bottom = -90.0
+offset_left = 109.0
+offset_top = -137.0
+offset_right = 226.0
+offset_bottom = -88.0
 text = "You collected X
 coins
 "
