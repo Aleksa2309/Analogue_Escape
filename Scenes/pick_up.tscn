@@ -169,11 +169,7 @@ tracks/3/path = NodePath(".")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-<<<<<<< HEAD
-"times": PackedFloat32Array(1),
-=======
 "times": PackedFloat32Array(0.3),
->>>>>>> 80c1c4fae46698a531367fb17307c45f3e7c4cb6
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],

@@ -44,7 +44,6 @@ func _physics_process(delta):
 	#Play animation
 	if is_on_floor():
 		if direction == 0:
-			animated_sprite_2d.play("move end")
 			if idle_timer.time_left == 0:
 				idle_timer.start()
 		else:
