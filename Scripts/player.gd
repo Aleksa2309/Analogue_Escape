@@ -8,8 +8,10 @@ const JUMP_ACCELARATION = -50
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var prevVelocity: Vector2 = Vector2.ZERO
+var prevDirection: float = 0
 var checkVelocity_x: float = 0
-var prevDirection: int = 0
+var direction: float = 0
+var checkStart: bool = false
 
 @onready var idle_timer = $idle_timer
 @onready var sprite_2d = $Sprite2D
@@ -35,9 +37,12 @@ func _physics_process(delta):
 	
 	
 	#Set the input direction
-	var direction = Input.get_axis("move_left", "move_right")
+	direction = Input.get_axis("move_left", "move_right")
+	if checkStart == false:
+		prevDirection = direction
+	checkStart = true
 	
-	#Flip the sprite
+		#Flip the sprite
 	if direction > 0:
 		sprite_2d.flip_h = false
 	elif direction < 0:
@@ -73,58 +78,48 @@ func _on_idle_timer_timeout():
 func update_animation_parameters():
 	
 	if checkVelocity_x == 0:
-		if state_machine.get_current_node() == &"move":
+		if state_machine.get_current_node() == &"move" and prevDirection == direction:
 			animation_tree["parameters/conditions/move_end"] = true
 			animation_tree["parameters/conditions/idle"] = false
 			animation_tree["parameters/conditions/move_start"] = false
 			animation_tree["parameters/conditions/is_moving"] = false
 			print(state_machine.get_current_node())
 			
-		if state_machine.get_current_node() == &"move_end":
+		elif state_machine.get_current_node() == &"move_end" and prevDirection == direction:
 			animation_tree["parameters/conditions/move_end"] = false
 			animation_tree["parameters/conditions/idle"] = true
 			animation_tree["parameters/conditions/move_start"] = false
 			animation_tree["parameters/conditions/is_moving"] = false
 			print(state_machine.get_current_node() + "0 ")
+			checkStart = false
 		
-		if state_machine.get_current_node() == &"move_start":
+		elif state_machine.get_current_node() == &"move_start" and prevDirection == direction:
 			animation_tree["parameters/conditions/move_end"] = true
 			animation_tree["parameters/conditions/idle"] = false
 			animation_tree["parameters/conditions/move_start"] = false
 			animation_tree["parameters/conditions/is_moving"] = false
 			print(state_machine.get_current_node() + "0 ")
-		
-		if state_machine.get_current_node() == &"idle":
-			animation_tree["parameters/conditions/move_end"] = false
-			animation_tree["parameters/conditions/idle"] = true
-			animation_tree["parameters/conditions/move_start"] = false
-			animation_tree["parameters/conditions/is_moving"] = false
-			print(state_machine.get_current_node() + "0 ")
+			
 	else:
-		if state_machine.get_current_node() == &"idle":
+		if state_machine.get_current_node() == &"idle" and prevDirection == direction:
 			animation_tree["parameters/conditions/move_end"] = false
 			animation_tree["parameters/conditions/idle"] = false
 			animation_tree["parameters/conditions/move_start"] = true
 			animation_tree["parameters/conditions/is_moving"] = false
 			print(state_machine.get_current_node() + "1 ")
 			
-		if state_machine.get_current_node() == &"move_end":
+		elif  state_machine.get_current_node() == &"move_end" and prevDirection == direction:
 			animation_tree["parameters/conditions/move_end"] = false
 			animation_tree["parameters/conditions/idle"] = false
 			animation_tree["parameters/conditions/move_start"] = true
 			animation_tree["parameters/conditions/is_moving"] = false
 			print(state_machine.get_current_node() + "1 ")
 		
-		if state_machine.get_current_node() == &"move_start":
+		elif state_machine.get_current_node() == &"move_start" and prevDirection == direction:
 			animation_tree["parameters/conditions/move_end"] = false
 			animation_tree["parameters/conditions/idle"] = false
 			animation_tree["parameters/conditions/move_start"] = false
 			animation_tree["parameters/conditions/is_moving"] = true
 			print(state_machine.get_current_node() + "1 ")
-			
-		if state_machine.get_current_node() == &"move":
-			animation_tree["parameters/conditions/move_end"] = false
-			animation_tree["parameters/conditions/idle"] = false
-			animation_tree["parameters/conditions/move_start"] = false
-			animation_tree["parameters/conditions/is_moving"] = true
-			print(state_machine.get_current_node() + "1 ")
+	
+	prevDirection = direction
